@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DiscordRPC;
+using static DiscordRP.Boss;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -47,14 +48,14 @@ namespace DiscordRP {
 		}
 
 		internal int prevSend = 0;
-		internal bool pauseUpdate = false;
+		internal bool inWorld = false;
 		internal bool canCreateClient;
 
 		internal ClientConfig config = null;
 
 		internal Timestamps timestamp = null;
 
-		internal Dictionary<int, (string, string, string, float)> exBossIDtoDetails = new Dictionary<int, (string, string, string, float)>();
+		internal Dictionary<int, DiscordRP.Boss> exBossIDtoDetails = new Dictionary<int, DiscordRP.Boss>();
 
 		internal DRPStatus customStatus = null;
 
@@ -66,6 +67,18 @@ namespace DiscordRP {
 		internal Dictionary<string, string> savedDiscordAppId;
 
 		internal int nowSeconds => (int)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
+
+		public void addBoss(int bossId, DiscordRP.Boss boss) {
+			Instance.exBossIDtoDetails.Add(bossId, boss);
+		}
+
+		public bool bossExists(int bossId) {
+			return Instance.exBossIDtoDetails.ContainsKey(bossId);
+		}
+
+		public DiscordRP.Boss getBossById(int bossId) {
+			return Instance.exBossIDtoDetails[bossId];
+		}
 
 		public DiscordRPMod() {
 			Properties = new ModProperties() {
@@ -81,9 +94,8 @@ namespace DiscordRP {
 			if (!Main.dedServ) {
 				currentClient = "default";
 				canCreateClient = true;
-				pauseUpdate = false;
 				exBiomeStatus = new List<BiomeStatus>();
-				exBossIDtoDetails = new Dictionary<int, (string, string, string, float)>();
+				exBossIDtoDetails = new Dictionary<int, DiscordRP.Boss>();
 
 				savedDiscordAppId = new Dictionary<string, string>();
 
@@ -124,9 +136,9 @@ namespace DiscordRP {
 				return;
 			}
 			currentClient = newClient;
-			if (Client.ApplicationID != savedDiscordAppId[newClient]) {
-				Client.ApplicationID = savedDiscordAppId[newClient];
-			}
+			// if (Client.ApplicationID != savedDiscordAppId[newClient]) {
+			// 	Client.ApplicationID = savedDiscordAppId[newClient];
+			// }
 		}
 
 		/// <summary>
@@ -192,7 +204,6 @@ namespace DiscordRP {
 		/// </summary>
 		private void ClientOnMainMenu() {
 			ChangeDiscordClient("default");
-			pauseUpdate = false;
 			if (customStatus == null) {
 				ClientSetStatus("", "In Main Menu", "payload_test", "tModLoader");
 			}
@@ -288,15 +299,12 @@ namespace DiscordRP {
 		/// </summary>
 		public void ClientUpdate() {
 			if (!Main.gameMenu && !Main.dedServ) {
-				if (Main.gamePaused || Main.gameInactive) {
-					pauseUpdate = true;
-				}
-				else {
-					pauseUpdate = false;
+				if (Main.gamePaused || Main.gameInactive || !inWorld) {
+					return;
 				}
 
 				int now = nowSeconds;
-				if (!pauseUpdate && now != prevSend && ((now - prevSend) % config.timer) == 0) {
+				if (now != prevSend && ((now - prevSend) % config.timer) == 0) {
 					ClientUpdatePlayer();
 					ClientForceUpdate();
 

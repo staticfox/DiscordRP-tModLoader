@@ -55,12 +55,14 @@ namespace DiscordRP {
 				if (string.IsNullOrWhiteSpace(imageKey.Item1)) {
 					imageKey.Item1 = "boss_placeholder";
 				}
-				if (DiscordRPMod.Instance.exBossIDtoDetails != null || DiscordRPMod.Instance.exBossIDtoDetails?.Count > 0) {
-					DiscordRPMod.Instance.exBossIDtoDetails.Add(id, (imageKey.Item1, imageKey.Item2, client, priority));
-				}
-				else {
-					Logger.Error($"Failed to add boss {imageKey.Item2} custom status info, report to Purplefin Neptuna");
-				}
+
+				Boss boss = new Boss() {
+					imageKey = imageKey.Item1,
+					imageName = imageKey.Item2,
+					priority = priority,
+					clientId = client,
+				};
+				DiscordRPMod.Instance.addBoss(id, boss);
 			}
 		}
 
@@ -194,17 +196,20 @@ namespace DiscordRP {
 			string selectedClient = "default";
 			bool getAnyBosses = false;
 
-			if (DiscordRPMod.Instance.exBossIDtoDetails != null || DiscordRPMod.Instance.exBossIDtoDetails?.Count > 0) {
-				//new way with priority support
-				float lastHighestPriority = -1f;
-				List<int> bossNPCs = Main.npc?.Take(200).Where(npc => npc.active && DiscordRPMod.Instance.exBossIDtoDetails.ContainsKey(npc.type)).Select(x => x.type).ToList();
-				foreach (int bossType in bossNPCs) {
-					(string, string, string, float) details = DiscordRPMod.Instance.exBossIDtoDetails[bossType];
-					if (details.Item4 >= lastHighestPriority) {
-						getAnyBosses = true;
-						(largeImageKey, largeImageText, selectedClient, _) = details;
-						lastHighestPriority = details.Item4;
-					}
+			// new way with priority support
+			float lastHighestPriority = -1f;
+			List<int> activeBossIDs = Main.npc?.Take(200).Where(npc => {
+				return npc.active && DiscordRPMod.Instance.bossExists(npc.type);
+			}).Select(npc => npc.type).ToList();
+
+			foreach (int bossId in activeBossIDs) {
+				Boss boss = DiscordRPMod.Instance.getBossById(bossId);
+				if (boss.priority >= lastHighestPriority) {
+					getAnyBosses = true;
+					largeImageKey = boss.imageKey;
+					largeImageText = boss.imageName;
+					selectedClient = boss.clientId;
+					lastHighestPriority = boss.priority;
 				}
 			}
 

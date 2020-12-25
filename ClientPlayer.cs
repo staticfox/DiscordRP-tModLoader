@@ -9,10 +9,11 @@ namespace DiscordRP {
 		internal bool dead = false;
 		internal string worldStaticInfo = "";
 		internal int nearbyNPC = 0;
+		internal bool isMe => player.whoAmI == Main.myPlayer;
 
 		public override void OnEnterWorld(Player player) {
-			if (player.whoAmI == Main.myPlayer) {
-				DiscordRPMod.Instance.pauseUpdate = false;
+			if (isMe) {
+				DiscordRPMod.Instance.inWorld = false;
 				string wName = Main.worldName;
 				bool expert = Main.expertMode;
 				string wDiff = (expert) ? "(Expert)" : "(Normal)";
@@ -24,11 +25,19 @@ namespace DiscordRP {
 		}
 
 		public override void PlayerConnect(Player player) {
+			if (isMe) {
+				DiscordRPMod.Instance.inWorld = true;
+			}
+
 			DiscordRPMod.Instance.UpdateLobbyInfo();
 			DiscordRPMod.Instance.ClientForceUpdate();
 		}
 
 		public override void PlayerDisconnect(Player player) {
+			if (isMe) {
+				DiscordRPMod.Instance.inWorld = false;
+			}
+
 			DiscordRPMod.Instance.UpdateLobbyInfo();
 			DiscordRPMod.Instance.ClientForceUpdate();
 		}
@@ -38,13 +47,13 @@ namespace DiscordRP {
 		}
 
 		public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource) {
-			if (player.whoAmI == Main.myPlayer) {
+			if (isMe) {
 				dead = true;
 			}
 		}
 
 		public override void OnRespawn(Player player) {
-			if (player.whoAmI == Main.myPlayer) {
+			if (isMe) {
 				dead = false;
 			}
 		}
