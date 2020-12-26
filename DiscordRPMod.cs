@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DiscordRPC;
 using static DiscordRP.Boss;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace DiscordRP {
@@ -117,7 +118,7 @@ namespace DiscordRP {
 				DRPX.AddVanillaBiomes();
 				DRPX.AddVanillaEvents();
 
-				Main.OnTick += ClientUpdate;
+				Main.OnTickForThirdPartySoftwareOnly += ClientUpdate;
 				//finished
 				canCreateClient = false;
 				ClientOnMainMenu();
@@ -314,7 +315,7 @@ namespace DiscordRP {
 		}
 
 		public override void Unload() {
-			Main.OnTick -= ClientUpdate;
+			Main.OnTickForThirdPartySoftwareOnly -= ClientUpdate;
 			Client?.Dispose();
 
 			Instance = null;
@@ -334,7 +335,7 @@ namespace DiscordRP {
 		internal void UpdateLobbyInfo() {
 			if (Main.LobbyId != 0UL) {
 				//string sId = SteamUser.GetSteamID().ToString();
-				ClientSetParty(null, Main.LocalPlayer.name, Main.ActivePlayersCount);
+				ClientSetParty(null, Main.LocalPlayer.name, Main.CurrentFrameFlags.ActivePlayersCount);
 			}
 		}
 
@@ -378,27 +379,27 @@ namespace DiscordRP {
 			string text = null;
 			string atkType = "";
 			Item item = Main.LocalPlayer?.HeldItem;
+
+			List<(DamageClass, string)> DamageClasses = new List<(DamageClass, string)>() {
+				(DamageClass.Melee, "Melee"),
+				(DamageClass.Ranged, "Range"),
+				(DamageClass.Magic, "Magic"),
+				(DamageClass.Throwing, "Throw"),
+				(DamageClass.Summon, "Summon"),
+			};
+
 			if (item != null) {
 				text = item.Name;
-				if (item.melee) {
-					atk = (int) Math.Ceiling(item.damage * Main.LocalPlayer.meleeDamage);
-					atkType = "Melee";
-				}
-				else if (item.ranged) {
-					atk = (int) Math.Ceiling(item.damage * Main.LocalPlayer.rangedDamage);
-					atkType = "Range";
-				}
-				else if (item.magic) {
-					atk = (int) Math.Ceiling(item.damage * Main.LocalPlayer.magicDamage);
-					atkType = "Magic";
-				}
-				else if (item.thrown) {
-					atk = (int) Math.Ceiling(item.damage * Main.LocalPlayer.thrownDamage);
-					atkType = "Throw";
-				}
-				else if (item.summon) {
-					atk = (int) Math.Ceiling(item.damage * Main.LocalPlayer.minionDamage);
-					atkType = "Summon";
+
+				foreach (var tuple in DamageClasses) {
+					DamageClass damageClass = tuple.Item1;
+					string damageName = tuple.Item2;
+
+					if (item.DamageType == damageClass) {
+						atk = (int) Math.Ceiling((float)item.damage * (float)Main.LocalPlayer.GetDamage(damageClass));
+						atkType = damageName;
+						break;
+					}
 				}
 			}
 			if (atk >= 0) {

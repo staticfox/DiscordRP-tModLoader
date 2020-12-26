@@ -336,11 +336,11 @@ namespace DiscordRP {
 				("biome_usnow", "Underground Snow"), 10f
 			);
 			AddBiome(
-				() => LPlayer.ZoneHoly,
+				() => LPlayer.ZoneHallow,
 				("biome_holy", "Hollow"), 11f
 			);
 			AddBiome(
-				() => LPlayer.ZoneHoly && LPlayer.ZoneRockLayerHeight,
+				() => LPlayer.ZoneHallow && LPlayer.ZoneRockLayerHeight,
 				("biome_uholy", "Underground Hollow"), 12f
 			);
 			AddBiome(
