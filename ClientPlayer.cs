@@ -13,13 +13,12 @@ namespace DiscordRP {
 
 		public override void OnEnterWorld(Player player) {
 			if (isMe) {
-				DiscordRPMod.Instance.inWorld = false;
-				string wName = Main.worldName;
-				bool expert = Main.expertMode;
-				string wDiff = (expert) ? "(Expert)" : "(Normal)";
-				DiscordRPMod.Instance.worldStaticInfo = string.Format("Playing {0} {1}", wName, wDiff);
+				DiscordRPMod.Instance.inWorld = true;
+
+				DiscordRPMod.Instance.UpdateWorldStaticInfo();
 				DiscordRPMod.Instance.ClientUpdatePlayer();
 			}
+
 			DiscordRPMod.Instance.UpdateLobbyInfo();
 			DiscordRPMod.Instance.ClientForceUpdate();
 		}

@@ -29,6 +29,11 @@ namespace DiscordRP {
 		[Label("Display Day/Night")]
 		[DefaultValue(true)]
 		public bool showTimeCycle;
+
+		[Label("Display World Name")]
+		[DefaultValue(true)]
+		public bool showWorldName;
+
 		[Label("Display Player Health")]
 		[DefaultValue(true)]
 		public bool showHealth;
@@ -63,6 +68,7 @@ namespace DiscordRP {
 				DiscordRPMod.Instance.currentClient = "default";
 				DiscordRPMod.Instance.ChangeDiscordClient(currentClient);
 				if (!Main.gameMenu) {
+					DiscordRPMod.Instance.UpdateWorldStaticInfo();
 					DiscordRPMod.Instance.ClientUpdatePlayer();
 				}
 				DiscordRPMod.Instance.ClientForceUpdate();

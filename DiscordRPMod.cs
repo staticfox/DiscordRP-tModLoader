@@ -402,11 +402,27 @@ namespace DiscordRP {
 					}
 				}
 			}
+
 			if (atk >= 0) {
 				key = "atk_" + atkType.ToLower();
 				text += (config.showDamage ? $" ({atk} Damage)" : "");
 			}
 			return (key, text);
+		}
+
+		public void UpdateWorldStaticInfo() {
+			string wName = Main.worldName;
+			string wDiff = Main.masterMode ? "(Master)" : Main.expertMode ? "(Expert)" : "(Normal)";
+
+			if (!config.showWorldName) {
+				if (Main.netMode == NetmodeID.SinglePlayer) {
+					wName = "Single Player";
+				} else {
+					wName = "Multiplayer";
+				}
+			}
+
+			worldStaticInfo = string.Format("Playing {0} {1}", wName, wDiff);
 		}
 	}
 }
