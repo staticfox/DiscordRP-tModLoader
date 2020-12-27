@@ -7,28 +7,6 @@ using Terraria.ModLoader;
 
 namespace DiscordRP {
 
-	/// <summary>
-	/// Rich Presence Status class, currently only used for custom main menu
-	/// </summary>
-	internal class DRPStatus {
-		public string details = "", additionalDetails = "";
-		public string largeKey = "", largeImage = "";
-		public string smallKey = "", smallImage = "";
-		public string GetState() => additionalDetails;
-		public string GetDetails() => details;
-	}
-
-	/// <summary>
-	///	Class for custom biomes
-	/// </summary>
-	internal class BiomeStatus {
-		public Func<bool> checker = null;
-		public string largeKey = "biome_placeholder";
-		public string largeText = "???";
-		public string client = "default";
-		public float priority = 0f;
-	}
-
 	public class DiscordRPMod : Mod {
 
 		//Mod Helper Issues report
