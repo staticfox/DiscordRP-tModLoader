@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using DiscordRPC;
-using static DiscordRP.Boss;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -56,7 +55,7 @@ namespace DiscordRP {
 
 		internal Timestamps timestamp = null;
 
-		internal Dictionary<int, DiscordRP.Boss> exBossIDtoDetails = new Dictionary<int, DiscordRP.Boss>();
+		internal Dictionary<int, Boss> exBossIDtoDetails = new Dictionary<int, Boss>();
 
 		internal DRPStatus customStatus = null;
 
@@ -71,7 +70,7 @@ namespace DiscordRP {
 
 		internal ClientPlayer modPlayer => Main.LocalPlayer.GetModPlayer<ClientPlayer>();
 
-		public void addBoss(int bossId, DiscordRP.Boss boss) {
+		public void addBoss(int bossId, Boss boss) {
 			Instance.exBossIDtoDetails.Add(bossId, boss);
 		}
 
@@ -79,7 +78,7 @@ namespace DiscordRP {
 			return Instance.exBossIDtoDetails.ContainsKey(bossId);
 		}
 
-		public DiscordRP.Boss getBossById(int bossId) {
+		public Boss getBossById(int bossId) {
 			return Instance.exBossIDtoDetails[bossId];
 		}
 
@@ -98,7 +97,7 @@ namespace DiscordRP {
 				currentClient = "default";
 				canCreateClient = true;
 				exBiomeStatus = new List<BiomeStatus>();
-				exBossIDtoDetails = new Dictionary<int, DiscordRP.Boss>();
+				exBossIDtoDetails = new Dictionary<int, Boss>();
 
 				savedDiscordAppId = new Dictionary<string, string>();
 
