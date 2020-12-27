@@ -177,11 +177,64 @@ namespace DiscordRP {
 					if (biome.checker() && biome.priority >= lastHighestPriority) {
 						lastHighestPriority = biome.priority;
 						largeImageKey = biome.largeKey;
-						largeImageText = "In " + biome.largeText + (DiscordRPMod.Instance.config.showTimeCycle ? $" ({(Main.dayTime ? "Day" : "Night")})" : "");
+						largeImageText = "In " + biome.largeText;
 						selectedClient = biome.client;
 					}
 				}
 			}
+
+			if (largeImageText != null) {
+				// Notes on the time system in Terraria - 'time'
+				// is referred to as the amount of seconds that
+				// have passed since the day transitioned to night
+				// or vice-versa. The key to check Main.dayTime
+				// to determine whether 0.0 is 4:30 AM (day) or
+				// 7:30 PM (night).
+				//
+				// 1 hour   = 3600
+				// 1 minute = 60
+				// 1 second = 1
+				//
+				// 15 hours of day
+				//
+				// Day start = 4:30 AM
+				// dayLength = 54000.0
+				//
+				// 9 hours of night
+				//
+				// Night start = 7:30 PM
+				// nightLength = 32400.0
+
+				if (DiscordRPMod.Instance.config.showTimeCycle) {
+					largeImageText += " (";
+
+					if (Main.dayTime) {
+						// We'll consider 6:30 AM as the time when
+						// day "officially" starts and 6:00 PM as
+						// the time when day winds down. Partially
+						// going off of IRL parallels and partially
+						// because peak morning fishing ends at
+						// 6:30 AM and the merchant will always
+						// leave at 6pm.
+						if (Main.time < 7200.0) {
+							largeImageText += "Dawn";
+						} else if (Main.time >= 48600.0) {
+							largeImageText += "Dusk";
+						} else {
+							largeImageText += "Day";
+						}
+					} else {
+						// The vast majority of checks are in the
+						// day time since it's completely dark in
+						// Terraria for the entire duration of the
+						// night.
+						largeImageText += "Night";
+					}
+
+					largeImageText += ")";
+				}
+			}
+
 			//DiscordRP.Instance.ChangeDiscordClient(selectedClient);
 			return (largeImageKey, largeImageText, selectedClient);
 		}
