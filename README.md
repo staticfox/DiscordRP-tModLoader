@@ -17,11 +17,13 @@ Displayed info:
 ## Development
 
 1. Clone this repo to tmod's source dir
+
 ```
-$ git clone https://repourl "Terraria\ModLoader\Mod Sources\DiscordRP"
+$ git clone https://github.com/staticfox/DiscordRP-tModLoader "C:\Users\USERNAME\Documents\My Games\Terraria\ModLoader\Beta\Mod Sources\DiscordRP"
 ```
 
-2. Download Discord RPC libraries
-  a. Download https://github.com/discord/discord-rpc/releases/download/v3.4.0/discord-rpc-win.zip and place `discord-rpc/win64-dynamic/discord-rpc.dll` in `lib/discord-rpc.dll`
+2. Download Discord RPC libraries:
 
-  b. Download `artifacts\net35\DiscordRPC.dll` from https://ci.appveyor.com/project/Lachee/discord-rpc-csharp/build/artifacts and place it in `lib/DiscordRPC.dll`
+    a. Download https://github.com/discord/discord-rpc/releases/download/v3.4.0/discord-rpc-win.zip and place `discord-rpc/win64-dynamic/discord-rpc.dll` in `lib/discord-rpc.dll`. (https://github.com/discord/discord-rpc)
+
+    b. Download `artifacts\net35\DiscordRPC.dll` from https://ci.appveyor.com/project/Lachee/discord-rpc-csharp/build/artifacts and place it in `lib/DiscordRPC.dll`. (https://github.com/Lachee/discord-rpc-csharp)
