@@ -187,7 +187,7 @@ namespace DiscordRP {
 				// Notes on the time system in Terraria - 'time'
 				// is referred to as the amount of seconds that
 				// have passed since the day transitioned to night
-				// or vice-versa. The key to check Main.dayTime
+				// or vice-versa. The key is to check Main.dayTime
 				// to determine whether 0.0 is 4:30 AM (day) or
 				// 7:30 PM (night).
 				//
@@ -209,16 +209,16 @@ namespace DiscordRP {
 					largeImageText += " (";
 
 					if (Main.dayTime) {
-						// We'll consider 6:30 AM as the time when
+						// We'll consider 6:00 AM as the time when
 						// day "officially" starts and 6:00 PM as
 						// the time when day winds down. Partially
 						// going off of IRL parallels and partially
-						// because peak morning fishing ends at
-						// 6:30 AM and the merchant will always
+						// because peak fishing ends at
+						// 6:00 AM and the merchant will always
 						// leave at 6pm.
 						if (Main.time < 7200.0) {
 							largeImageText += "Dawn";
-						} else if (Main.time >= 48600.0) {
+						} else if (Main.time >= 46800.0) {
 							largeImageText += "Dusk";
 						} else {
 							largeImageText += "Day";
