@@ -55,6 +55,10 @@ namespace DiscordRP {
 		[DefaultValue(true)]
 		public bool showDamage;
 
+		[Label("Display Weapon Prefix")]
+		[DefaultValue(true)]
+		public bool showPrefix;
+
 		public override void OnLoaded() {
 			DiscordRPMod.Instance.config = this;
 		}

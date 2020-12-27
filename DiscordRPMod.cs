@@ -400,7 +400,14 @@ namespace DiscordRP {
 			};
 
 			if (item != null) {
-				text = item.Name;
+				text = "";
+
+				if (config.showPrefix && item.prefix != 0 && item.prefix < PrefixID.Count) {
+					string prefix = PrefixID.Search.GetName(item.prefix);
+					text += prefix + " ";
+				}
+
+				text += item.Name;
 
 				foreach (var tuple in DamageClasses) {
 					DamageClass damageClass = tuple.Item1;
