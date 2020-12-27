@@ -1,8 +1,17 @@
-.vs/*
-bin/*
-obj/*
-lib/*
-Properties/*
-*.sln
-*.csproj
+# Auto-generated Visual Studio stuff
+.vs/
+bin/
+obj/
+lib/
+Properties/
 *.user
+
+# Sublime text stuff
+*.sublime-*
+
+# Keep the solution and project files so others
+# can easily pick this project up.
+*.sln
+!DiscordRP.sln
+*.csproj
+!DiscordRP.csproj
