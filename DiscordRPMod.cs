@@ -71,15 +71,15 @@ namespace DiscordRP {
 		internal ClientPlayer modPlayer => Main.LocalPlayer.GetModPlayer<ClientPlayer>();
 
 		public void addBoss(int bossId, Boss boss) {
-			Instance.exBossIDtoDetails.Add(bossId, boss);
+			exBossIDtoDetails.Add(bossId, boss);
 		}
 
 		public bool bossExists(int bossId) {
-			return Instance.exBossIDtoDetails.ContainsKey(bossId);
+			return exBossIDtoDetails.ContainsKey(bossId);
 		}
 
 		public Boss getBossById(int bossId) {
-			return Instance.exBossIDtoDetails[bossId];
+			return exBossIDtoDetails[bossId];
 		}
 
 		public DiscordRPMod() {
@@ -386,7 +386,7 @@ namespace DiscordRP {
 
 			ClientSetStatus(state, bigText, bigKey, worldStaticInfo, itemKey, itemText);
 			UpdateLobbyInfo();
-			Instance.ChangeDiscordClient(selectedClient);
+			ChangeDiscordClient(selectedClient);
 
 			if (modPlayer.dead)
 				ClientForceUpdate();
