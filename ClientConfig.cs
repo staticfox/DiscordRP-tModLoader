@@ -52,7 +52,7 @@ namespace DiscordRP {
 		public bool showDefense;
 
 		[Label("Display Weapon Damage")]
-		[DefaultValue(true)]
+		[DefaultValue(false)]
 		public bool showDamage;
 
 		[Label("Display Weapon Prefix")]
