@@ -26,6 +26,7 @@ namespace DiscordRP {
 		[Label("Display Time Elapsed")]
 		[DefaultValue(true)]
 		public bool showTime;
+
 		[Label("Display Day/Night")]
 		[DefaultValue(true)]
 		public bool showTimeCycle;
@@ -37,12 +38,19 @@ namespace DiscordRP {
 		[Label("Display Player Health")]
 		[DefaultValue(true)]
 		public bool showHealth;
+
+		[Label("Display Player DPS")]
+		[DefaultValue(true)]
+		public bool showDPS;
+
 		[Label("Display Player Mana")]
-		[DefaultValue(true)]
+		[DefaultValue(false)]
 		public bool showMana;
+
 		[Label("Display Player Defense")]
-		[DefaultValue(true)]
+		[DefaultValue(false)]
 		public bool showDefense;
+
 		[Label("Display Weapon Damage")]
 		[DefaultValue(true)]
 		public bool showDamage;
@@ -76,6 +84,10 @@ namespace DiscordRP {
 			else if (!Client.IsDisposed) {
 				Client.Dispose();
 			}
+		}
+
+		public bool ShowPlayerStats() {
+			return (showHealth || showMana || showDefense || showDPS);
 		}
 	}
 }

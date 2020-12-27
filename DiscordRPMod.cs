@@ -69,6 +69,8 @@ namespace DiscordRP {
 
 		internal int nowSeconds => (int)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
 
+		internal ClientPlayer modPlayer => Main.LocalPlayer.GetModPlayer<ClientPlayer>();
+
 		public void addBoss(int bossId, DiscordRP.Boss boss) {
 			Instance.exBossIDtoDetails.Add(bossId, boss);
 		}
@@ -343,30 +345,39 @@ namespace DiscordRP {
 		/// method for update the status, checking from item to biome/boss/events
 		/// </summary>
 		internal void ClientUpdatePlayer() {
-			if (Main.LocalPlayer != null) {
-				(string itemKey, string itemText) = GetItemStat();
-				(string bigKey, string bigText, string selectedClient) = DRPX.GetBoss();
+			if (Main.LocalPlayer == null)
+				return;
 
-				string state;
-				if (!Main.LocalPlayer.GetModPlayer<ClientPlayer>().dead) {
-					state = $"{(config.showHealth ? $"HP: {Main.LocalPlayer.statLife} " : "")}";
-					state += $"{(config.showMana ? $"MP: {Main.LocalPlayer.statMana} " : "")}";
-					state += $"{(config.showDefense ? $"DEF: {Main.LocalPlayer.statDefense}" : "")}";
-					if (string.IsNullOrWhiteSpace(state)) {
-						state = null;
-					}
-				}
-				else {
-					state = (config.showHealth || config.showMana || config.showDefense) ? string.Format("Dead") : null;
-				}
+			(string itemKey, string itemText) = GetItemStat();
+			(string bigKey, string bigText, string selectedClient) = DRPX.GetBoss();
 
-				ClientSetStatus(state, bigText, bigKey, worldStaticInfo, itemKey, itemText);
-				UpdateLobbyInfo();
-				Instance.ChangeDiscordClient(selectedClient);
+			string state = null;
+			if (!modPlayer.dead && config.ShowPlayerStats()) {
+				state = "";
 
-				if (Main.LocalPlayer.GetModPlayer<ClientPlayer>().dead)
-					ClientForceUpdate();
+				if (config.showHealth)
+					state += $"HP: {Main.LocalPlayer.statLife} ";
+
+				if (config.showDPS)
+					state += $"DPS: {Main.LocalPlayer.getDPS()} ";
+
+				if (config.showMana)
+					state += $"MP: {Main.LocalPlayer.statMana} ";
+
+				if (config.showDefense)
+					state += $"DEF: {Main.LocalPlayer.statDefense} ";
+
+				state = state.Trim();
+			} else if (modPlayer.dead && config.ShowPlayerStats()) {
+				state = "Dead";
 			}
+
+			ClientSetStatus(state, bigText, bigKey, worldStaticInfo, itemKey, itemText);
+			UpdateLobbyInfo();
+			Instance.ChangeDiscordClient(selectedClient);
+
+			if (modPlayer.dead)
+				ClientForceUpdate();
 		}
 
 		/// <summary>
