@@ -56,5 +56,13 @@ namespace DiscordRP {
 				dead = false;
 			}
 		}
+
+		public Tile CurrentTile() {
+			Player me = Main.LocalPlayer;
+
+			int xpos = (int)(me.Center.X / 16f);
+			int ypos = (int)(me.Center.Y / 16f);
+			return Main.tile[xpos, ypos];
+		}
 	}
 }

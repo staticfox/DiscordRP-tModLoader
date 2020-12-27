@@ -365,11 +365,11 @@ namespace DiscordRP {
 				("biome_mushroom", "Mushroom"), 4f
 			);
 			AddBiome(
-				() => LPlayer.ZoneJungle,
+				() => LPlayer.ZoneJungle && LPlayer.ZoneOverworldHeight,
 				("biome_jungle", "Jungle"), 5f
 			);
 			AddBiome(
-				() => LPlayer.ZoneJungle && (LPlayer.ZoneDirtLayerHeight || LPlayer.ZoneRockLayerHeight),
+				() => LPlayer.ZoneJungle && !LPlayer.ZoneOverworldHeight,
 				("biome_ujungle", "Underground Jungle"), 6f
 			);
 			AddBiome(
@@ -385,7 +385,7 @@ namespace DiscordRP {
 				("biome_snow", "Snow"), 9f
 			);
 			AddBiome(
-				() => LPlayer.ZoneSnow && LPlayer.ZoneRockLayerHeight,
+				() => LPlayer.ZoneSnow && !LPlayer.ZoneOverworldHeight,
 				("biome_usnow", "Underground Snow"), 10f
 			);
 			AddBiome(
@@ -393,7 +393,7 @@ namespace DiscordRP {
 				("biome_holy", "Hollow"), 11f
 			);
 			AddBiome(
-				() => LPlayer.ZoneHallow && LPlayer.ZoneRockLayerHeight,
+				() => LPlayer.ZoneHallow && !LPlayer.ZoneOverworldHeight,
 				("biome_uholy", "Underground Hollow"), 12f
 			);
 			AddBiome(
@@ -401,7 +401,7 @@ namespace DiscordRP {
 				("biome_corrupt", "Corruption"), 13f
 			);
 			AddBiome(
-				() => LPlayer.ZoneCorrupt && LPlayer.ZoneRockLayerHeight,
+				() => LPlayer.ZoneCorrupt && !LPlayer.ZoneOverworldHeight,
 				("biome_ucorrupt", "Underground Corruption"), 14f
 			);
 			AddBiome(
@@ -409,27 +409,27 @@ namespace DiscordRP {
 				("biome_crimson", "Crimson"), 15f
 			);
 			AddBiome(
-				() => LPlayer.ZoneCrimson && LPlayer.ZoneRockLayerHeight,
+				() => LPlayer.ZoneCrimson && !LPlayer.ZoneOverworldHeight,
 				("biome_ucrimson", "Underground Crimson"), 16f
 			);
 			AddBiome(
-				() => ClientWorld.spiderCave,
+				() => LCPlayer.CurrentTile()?.wall == WallID.SpiderUnsafe,
 				("biome_spider", "Spider Cave"), 17f
 			);
 			AddBiome(
-				() => LPlayer.ZoneGlowshroom && (LPlayer.ZoneDirtLayerHeight || LPlayer.ZoneRockLayerHeight),
+				() => LPlayer.ZoneGlowshroom && !LPlayer.ZoneOverworldHeight,
 				("biome_umushroom", "Underground Mushroom"), 18f
 			);
 			AddBiome(
-				() => ClientWorld.graniteCave,
+				() => LPlayer.ZoneGranite,
 				("biome_granite", "Granite Cave"), 19f
 			);
 			AddBiome(
-				() => ClientWorld.marbleCave,
+				() => LPlayer.ZoneMarble,
 				("biome_marble", "Marble Cave"), 20f
 			);
 			AddBiome(
-				() => ClientWorld.beeHive,
+				() => LPlayer.ZoneHive,
 				("biome_beehive", "Bee Hive"), 21f
 			);
 			AddBiome(
@@ -437,7 +437,7 @@ namespace DiscordRP {
 				("biome_dungeon", "Dungeon"), 22f
 			);
 			AddBiome(
-				() => ClientWorld.jungleTemple,
+				() => LCPlayer.CurrentTile()?.wall == WallID.LihzahrdBrickUnsafe,
 				("biome_temple", "Jungle Temple"), 23f
 			);
 			AddBiome(
