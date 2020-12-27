@@ -2,7 +2,7 @@
 [![Terraria](https://img.shields.io/badge/Terraria-tModLoader-green.svg)](https://forums.terraria.org/index.php?threads/1-3-tmodloader-a-modding-api.23726/) [![tModLoader](https://img.shields.io/badge/tModLoader-v0.11.7.5-brightgreen.svg)](https://github.com/blushiemagic/tModLoader/releases/v0.11.7.5/) [![GitHub release](https://img.shields.io/github/release/PurplefinNeptuna/DiscordRP-tModLoader.svg)](https://github.com/PurplefinNeptuna/DiscordRP-tModLoader/releases/latest)
 ### Go to [Wiki](https://github.com/PurplefinNeptuna/DiscordRP-tModLoader/wiki) for more information
 
-Discord Rich Presence for Terraria tModLoader
+Discord Rich Presence for Terraria tModLoader Beta
 
 Show your in-game activities to your DIscord status using Discord Rich Presence
 
