@@ -372,6 +372,14 @@ namespace DiscordRP {
 				() => LPlayer.ZoneJungle && !LPlayer.ZoneOverworldHeight,
 				("biome_ujungle", "Underground Jungle"), 6f
 			);
+			// The music in the underground jungle gets kinda epic when you
+			// get near the cavern layer, so I thought it would be neat to
+			// give it a darker image when that happens. It feels like a
+			// transition to a new zone, even though it technically isn't.
+			AddBiome(
+				() => LPlayer.ZoneJungle && !LPlayer.ZoneOverworldHeight && Main.curMusic == 54,
+				("biome_cjungle", "Underground Jungle"), 6.5f
+			);
 			AddBiome(
 				() => LPlayer.ZoneDesert,
 				("biome_desert", "Desert"), 7f
@@ -518,6 +526,13 @@ namespace DiscordRP {
 				NPCID.MoonLordHand,
 				NPCID.MoonLordCore
 			}, ("boss_moonlord", "Moon Lord"), 15f);
+			// 1.4.0.1 bosses
+			AddBoss(new List<int>() {
+				NPCID.QueenSlimeBoss
+			}, ("boss_queenslime", "Queen Slime"), 16f);
+			AddBoss(new List<int>() {
+				NPCID.HallowBoss
+			}, ("boss_empress_of_light", "Empress Of Light"), 17f);
 		}
 	}
 }

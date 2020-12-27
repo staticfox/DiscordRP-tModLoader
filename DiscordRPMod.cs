@@ -150,17 +150,30 @@ namespace DiscordRP {
 		/// <param name="appId">Discord App ID</param>
 		/// <param name="key">key for App ID</param>
 		internal void CreateNewDiscordRPCRichPresenceInstance(string key = "default") {
-			string appId = "404654478072086529";
+			// https://github.com/PurplefinNeptuna
+			// string discordAppId = "404654478072086529";
+
+			// The images tied to this app were copied from the
+			// original author's Discord app - I made a new app
+			// purely so I could continue to add images to the
+			// project based off the content added in 1.4.
+			// Social anxiety really sucks.
+			// https://github.com/staticfox
+			string discordAppId = "792583749040209960";
+
+			// This should never change
+			const string steamAppID = "1281930";
+
 			if (!savedDiscordAppId.ContainsKey(key)) {
-				savedDiscordAppId.Add(key, appId);
+				savedDiscordAppId.Add(key, discordAppId);
 			}
 
-			Client = new DiscordRpcClient(applicationID: appId, autoEvents: false);
+			Client = new DiscordRpcClient(applicationID: discordAppId, autoEvents: false);
 
 			bool failedToRegisterScheme = false;
 
 			try {
-				Client.RegisterUriScheme("1281930");
+				Client.RegisterUriScheme(steamAppID);
 			}
 			catch (Exception) {
 				failedToRegisterScheme = true;
@@ -423,7 +436,9 @@ namespace DiscordRP {
 
 			if (atk >= 0) {
 				key = "atk_" + atkType.ToLower();
-				text += (config.showDamage ? $" ({atk} Damage)" : "");
+
+				if (config.showDamage)
+					text += $" ({atk} Damage)";
 			}
 			return (key, text);
 		}
