@@ -335,7 +335,7 @@ namespace DiscordRP {
 		/// Change the status
 		/// </summary>
 		/// <param name="status">
-		/// An instance of <see cref="ClientStatus">
+		/// An instance of <see cref="ClientStatus" />
 		/// </param>
 		public void ClientSetStatus(ClientStatus status) {
 			RichPresenceInstance.Assets = RichPresenceInstance.Assets ?? new Assets();
