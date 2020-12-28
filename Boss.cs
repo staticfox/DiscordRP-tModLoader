@@ -10,7 +10,7 @@ namespace DiscordRP {
 		public string imageKey;
 
 		/// <value>
-		/// tooltip for the largeImageKey
+		/// tooltip for the imageKey
 		/// </value>
 		public string imageName;
 
