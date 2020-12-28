@@ -517,7 +517,7 @@ namespace DiscordRP {
 					string damageName = tuple.Item2;
 
 					if (item.DamageType == damageClass) {
-						atk = (int) Math.Ceiling((float)item.damage * (float)Main.LocalPlayer.GetDamage(damageClass));
+						atk = (int) Math.Ceiling(item.damage * (float)Main.LocalPlayer.GetDamage(damageClass));
 						atkType = damageName;
 						break;
 					}
@@ -545,7 +545,7 @@ namespace DiscordRP {
 				}
 			}
 
-			worldStaticInfo = string.Format("Playing {0} {1}", wName, wDiff);
+			worldStaticInfo = $"Playing {wName} {wDiff}";
 		}
 	}
 }
