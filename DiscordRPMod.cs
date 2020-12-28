@@ -35,7 +35,7 @@ namespace DiscordRP {
 
 		internal Dictionary<int, Boss> exBossIDtoDetails = new Dictionary<int, Boss>();
 
-		internal DRPStatus customStatus = null;
+		private ClientStatus customStatus = null;
 
 		private List<Biome> presentableBiomes = new List<Biome>();
 
@@ -167,6 +167,10 @@ namespace DiscordRP {
 				state += $"DEF: {Main.LocalPlayer.statDefense} ";
 
 			return state.Trim();
+		}
+
+		public void setCustomStatus(ClientStatus status) {
+			customStatus = status;
 		}
 
 		public DiscordRPMod() {
@@ -306,20 +310,14 @@ namespace DiscordRP {
 		/// </summary>
 		private void ClientOnMainMenu() {
 			ChangeDiscordClient("default");
-			ClientStatus status = new ClientStatus() {};
 
-			if (customStatus == null) {
-				status.details = "In Main Menu";
-				status.largeImageKey = "payload_test";
-				status.largeImageText = "tModLoader";
-			}
-			else {
-				status.state = customStatus.GetState();
-				status.details = customStatus.GetDetails();
-				status.largeImageKey = customStatus.largeKey;
-				status.largeImageText = customStatus.largeImage;
-				status.smallImageKey = customStatus.smallKey;
-				status.smallImageText = customStatus.smallImage;
+			ClientStatus status = customStatus;
+			if (status == null) {
+				status = new ClientStatus() {
+					details = "In Main Menu",
+					largeImageKey = "payload_test",
+					largeImageText = "tModLoader",
+				};
 			}
 
 			ClientSetStatus(status);

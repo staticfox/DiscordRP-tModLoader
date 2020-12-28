@@ -25,14 +25,22 @@ namespace DiscordRP {
 		/// <param name="largeImage">key and text for large image</param>
 		/// <param name="smallImage">key and text for small image</param>
 		public static void NewMenuStatus(string details, string additionalDetails, (string, string) largeImage, (string, string) smallImage) {
-			DiscordRPMod.Instance.customStatus = new DRPStatus() {
+			if (string.IsNullOrEmpty(largeImage.Item1))
+				largeImage.Item1 = "mod_placeholder";
+
+			if (string.IsNullOrEmpty(smallImage.Item1))
+				smallImage.Item1 = null;
+
+			ClientStatus customStatus = new ClientStatus() {
+				state = additionalDetails,
 				details = details,
-				additionalDetails = additionalDetails,
-				largeKey = (string.IsNullOrWhiteSpace(largeImage.Item1)) ? "mod_placeholder" : largeImage.Item1,
-				largeImage = largeImage.Item2,
-				smallKey = (string.IsNullOrWhiteSpace(smallImage.Item1)) ? null : smallImage.Item1,
-				smallImage = smallImage.Item2,
+				largeImageKey = largeImage.Item1,
+				largeImageText = largeImage.Item2,
+				smallImageKey = smallImage.Item1,
+				smallImageText = smallImage.Item2,
 			};
+
+			DiscordRPMod.Instance.setCustomStatus(customStatus);
 		}
 
 		/// <summary>
