@@ -82,12 +82,15 @@ namespace DiscordRP {
 				Logger.Error($"Instance {client} not found, redirected to default Instance!");
 				client = "default";
 			}
-			if (DiscordRPMod.Instance.exBiomeStatus != null || DiscordRPMod.Instance.exBiomeStatus?.Count > 0) {
-				DiscordRPMod.Instance.exBiomeStatus.Add(new BiomeStatus() { checker = checker, largeKey = imageKey.Item1, largeText = imageKey.Item2, priority = priority, client = client });
-			}
-			else {
-				Logger.Error($"Failed to add biome {imageKey.Item2} custom status info, report to Purplefin Neptuna");
-			}
+
+			BiomeStatus biome = new BiomeStatus() {
+				checker = checker,
+				largeKey = imageKey.Item1,
+				largeText = imageKey.Item2,
+				priority = priority,
+				client = client,
+			};
+			DiscordRPMod.Instance.addBiome(biome);
 		}
 
 		/// <summary>
@@ -160,120 +163,6 @@ namespace DiscordRP {
 			catch {
 			}
 			return "Failure";
-		}
-
-		/// <summary>
-		///
-		/// </summary>
-		/// <returns></returns>
-		public static (string, string, string) GetBiome() {
-			string largeImageKey = null;
-			string largeImageText = null;
-			string selectedClient = "default";
-
-			if (DiscordRPMod.Instance.exBiomeStatus != null || DiscordRPMod.Instance.exBiomeStatus?.Count > 0) {
-				float lastHighestPriority = -1f;
-				foreach (BiomeStatus biome in DiscordRPMod.Instance.exBiomeStatus) {
-					if (biome.checker() && biome.priority >= lastHighestPriority) {
-						lastHighestPriority = biome.priority;
-						largeImageKey = biome.largeKey;
-						largeImageText = "In " + biome.largeText;
-						selectedClient = biome.client;
-					}
-				}
-			}
-
-			if (largeImageText != null) {
-				// Notes on the time system in Terraria - 'time'
-				// is referred to as the amount of seconds that
-				// have passed since the day transitioned to night
-				// or vice-versa. The key is to check Main.dayTime
-				// to determine whether 0.0 is 4:30 AM (day) or
-				// 7:30 PM (night).
-				//
-				// 1 hour   = 3600
-				// 1 minute = 60
-				// 1 second = 1
-				//
-				// 15 hours of day
-				//
-				// Day start = 4:30 AM
-				// dayLength = 54000.0
-				//
-				// 9 hours of night
-				//
-				// Night start = 7:30 PM
-				// nightLength = 32400.0
-
-				if (DiscordRPMod.Instance.config.showTimeCycle) {
-					largeImageText += " (";
-
-					if (Main.dayTime) {
-						// We'll consider 6:00 AM as the time when
-						// day "officially" starts and 6:00 PM as
-						// the time when day winds down. Partially
-						// going off of IRL parallels and partially
-						// because peak fishing ends at
-						// 6:00 AM and the merchant will always
-						// leave at 6pm.
-						if (Main.time < 7200.0) {
-							largeImageText += "Dawn";
-						} else if (Main.time >= 46800.0) {
-							largeImageText += "Dusk";
-						} else {
-							largeImageText += "Day";
-						}
-					} else {
-						// The vast majority of checks are in the
-						// day time since it's completely dark in
-						// Terraria for the entire duration of the
-						// night.
-						largeImageText += "Night";
-					}
-
-					largeImageText += ")";
-				}
-			}
-
-			//DiscordRP.Instance.ChangeDiscordClient(selectedClient);
-			return (largeImageKey, largeImageText, selectedClient);
-		}
-
-		/// <summary>
-		///
-		/// </summary>
-		/// <returns></returns>
-		public static (string, string, string) GetBoss() {
-			string largeImageKey = null;
-			string largeImageText = null;
-			string selectedClient = "default";
-			bool getAnyBosses = false;
-
-			// new way with priority support
-			float lastHighestPriority = -1f;
-			List<int> activeBossIDs = Main.npc?.Take(200).Where(npc => {
-				return npc.active && DiscordRPMod.Instance.bossExists(npc.type);
-			}).Select(npc => npc.type).ToList();
-
-			foreach (int bossId in activeBossIDs) {
-				Boss boss = DiscordRPMod.Instance.getBossById(bossId);
-				if (boss.priority >= lastHighestPriority) {
-					getAnyBosses = true;
-					largeImageKey = boss.imageKey;
-					largeImageText = boss.imageName;
-					selectedClient = boss.clientId;
-					lastHighestPriority = boss.priority;
-				}
-			}
-
-			if (getAnyBosses) {
-				largeImageText = "Fighting " + largeImageText;
-				//DiscordRP.Instance.ChangeDiscordClient(selectedClient);
-			}
-			else {
-				(largeImageKey, largeImageText, selectedClient) = GetBiome();
-			}
-			return (largeImageKey, largeImageText, selectedClient);
 		}
 
 		public static void AddVanillaEvents() {

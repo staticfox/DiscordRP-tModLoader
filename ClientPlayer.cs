@@ -7,7 +7,6 @@ using Terraria.ModLoader;
 namespace DiscordRP {
 	public class ClientPlayer : ModPlayer {
 		internal bool dead = false;
-		internal string worldStaticInfo = "";
 		internal int nearbyNPC = 0;
 		internal bool isMe => player.whoAmI == Main.myPlayer;
 

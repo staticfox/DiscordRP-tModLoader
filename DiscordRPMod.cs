@@ -52,12 +52,117 @@ namespace DiscordRP {
 			exBossIDtoDetails.Add(bossId, boss);
 		}
 
-		public bool bossExists(int bossId) {
+		private bool bossExists(int bossId) {
 			return exBossIDtoDetails.ContainsKey(bossId);
 		}
 
-		public Boss getBossById(int bossId) {
+		private Boss getBossById(int bossId) {
 			return exBossIDtoDetails[bossId];
+		}
+
+		private Boss getCurrentBoss() {
+			Boss currentBoss = null;
+
+			foreach (Terraria.NPC npc in Main.npc) {
+				if (!npc.active || !bossExists(npc.type))
+					continue;
+
+				Boss boss = getBossById(npc.type);
+				if (currentBoss != null && currentBoss.priority > boss.priority)
+					continue;
+
+				currentBoss = boss;
+			}
+
+			return currentBoss;
+		}
+
+		public void addBiome(BiomeStatus biome) {
+			exBiomeStatus.Add(biome);
+		}
+
+		private BiomeStatus getCurrentBiome() {
+			BiomeStatus currentBiome = null;
+
+			foreach (BiomeStatus biome in exBiomeStatus) {
+				if (biome.checker() && (currentBiome == null || biome.priority >= currentBiome.priority)) {
+					currentBiome = biome;
+				}
+			}
+
+			return currentBiome;
+		}
+
+		private string getTimeOfDay() {
+			if (!config.showTimeCycle)
+				return null;
+
+			// Notes on the time system in Terraria - 'time'
+			// is referred to as the amount of seconds that
+			// have passed since the day transitioned to night
+			// or vice-versa. The key is to check Main.dayTime
+			// to determine whether 0.0 is 4:30 AM (day) or
+			// 7:30 PM (night).
+			//
+			// 1 hour   = 3600
+			// 1 minute = 60
+			// 1 second = 1
+			//
+			// 15 hours of day
+			//
+			// Day start = 4:30 AM
+			// dayLength = 54000.0
+			//
+			// 9 hours of night
+			//
+			// Night start = 7:30 PM
+			// nightLength = 32400.0
+			if (Main.dayTime) {
+				// We'll consider 6:00 AM as the time when
+				// day "officially" starts and 6:00 PM as
+				// the time when day winds down. Partially
+				// going off of IRL parallels and partially
+				// because peak fishing ends at
+				// 6:00 AM and the merchant will always
+				// leave at 6pm.
+				if (Main.time < 7200.0) {
+					return "Dawn";
+				} else if (Main.time >= 46800.0) {
+					return "Dusk";
+				} else {
+					return "Day";
+				}
+			} else {
+				// The vast majority of checks are in the
+				// day time since it's completely dark in
+				// Terraria for the entire duration of the
+				// night.
+				return "Night";
+			}
+		}
+
+		private string getPlayerState() {
+			if (!config.ShowPlayerStats())
+				return null;
+
+			if (modPlayer.dead)
+				return "Dead";
+
+			string state = "";
+
+			if (config.showHealth)
+				state += $"HP: {Main.LocalPlayer.statLife} ";
+
+			if (config.showDPS)
+				state += $"DPS: {Main.LocalPlayer.getDPS()} ";
+
+			if (config.showMana)
+				state += $"MP: {Main.LocalPlayer.statMana} ";
+
+			if (config.showDefense)
+				state += $"DEF: {Main.LocalPlayer.statDefense} ";
+
+			return state.Trim();
 		}
 
 		public DiscordRPMod() {
@@ -338,31 +443,31 @@ namespace DiscordRP {
 			if (Main.LocalPlayer == null)
 				return;
 
+			string largeImageKey = null;
+			string largeImageText = null;
+			string selectedClient = "default";
+
 			(string itemKey, string itemText) = GetItemStat();
-			(string bigKey, string bigText, string selectedClient) = DRPX.GetBoss();
 
-			string state = null;
-			if (!modPlayer.dead && config.ShowPlayerStats()) {
-				state = "";
+			Boss boss = getCurrentBoss();
+			BiomeStatus biome = getCurrentBiome();
 
-				if (config.showHealth)
-					state += $"HP: {Main.LocalPlayer.statLife} ";
+			if (boss != null) {
+				largeImageKey = boss.imageKey;
+				largeImageText = "Fighting " + boss.imageName;
+				selectedClient = boss.clientId;
+			} else if (biome != null) {
+				largeImageKey = biome.largeKey;
+				largeImageText = "In " + biome.largeText;
+				selectedClient = biome.client;
 
-				if (config.showDPS)
-					state += $"DPS: {Main.LocalPlayer.getDPS()} ";
-
-				if (config.showMana)
-					state += $"MP: {Main.LocalPlayer.statMana} ";
-
-				if (config.showDefense)
-					state += $"DEF: {Main.LocalPlayer.statDefense} ";
-
-				state = state.Trim();
-			} else if (modPlayer.dead && config.ShowPlayerStats()) {
-				state = "Dead";
+				string timeOfDay = getTimeOfDay();
+				if (timeOfDay != null)
+					largeImageText += $" ({timeOfDay})";
 			}
 
-			ClientSetStatus(state, bigText, bigKey, worldStaticInfo, itemKey, itemText);
+			string state = getPlayerState();
+			ClientSetStatus(state, largeImageText, largeImageKey, worldStaticInfo, itemKey, itemText);
 			UpdateLobbyInfo();
 			ChangeDiscordClient(selectedClient);
 
