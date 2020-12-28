@@ -83,7 +83,7 @@ namespace DiscordRP {
 				client = "default";
 			}
 
-			BiomeStatus biome = new BiomeStatus() {
+			Biome biome = new Biome() {
 				checker = checker,
 				imageKey = imageKey.Item1,
 				imageName = imageKey.Item2,

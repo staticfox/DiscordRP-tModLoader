@@ -37,7 +37,7 @@ namespace DiscordRP {
 
 		internal DRPStatus customStatus = null;
 
-		internal List<BiomeStatus> exBiomeStatus = new List<BiomeStatus>();
+		private List<Biome> presentableBiomes = new List<Biome>();
 
 		internal string worldStaticInfo = null;
 
@@ -77,14 +77,14 @@ namespace DiscordRP {
 			return currentBoss;
 		}
 
-		public void addBiome(BiomeStatus biome) {
-			exBiomeStatus.Add(biome);
+		public void addBiome(Biome biome) {
+			presentableBiomes.Add(biome);
 		}
 
-		private BiomeStatus getCurrentBiome() {
-			BiomeStatus currentBiome = null;
+		private Biome getCurrentBiome() {
+			Biome currentBiome = null;
 
-			foreach (BiomeStatus biome in exBiomeStatus) {
+			foreach (Biome biome in presentableBiomes) {
 				if (!biome.active)
 					continue;
 
@@ -183,7 +183,7 @@ namespace DiscordRP {
 			if (!Main.dedServ) {
 				currentClient = "default";
 				canCreateClient = true;
-				exBiomeStatus = new List<BiomeStatus>();
+				presentableBiomes = new List<Biome>();
 				exBossIDtoDetails = new Dictionary<int, Boss>();
 
 				savedDiscordAppId = new Dictionary<string, string>();
@@ -463,7 +463,7 @@ namespace DiscordRP {
 			status.smallImageText = itemText;
 
 			Boss boss = getCurrentBoss();
-			BiomeStatus biome = getCurrentBiome();
+			Biome biome = getCurrentBiome();
 			string selectedClient = "default";
 
 			if (boss != null) {

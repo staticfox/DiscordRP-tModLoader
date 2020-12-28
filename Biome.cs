@@ -4,7 +4,7 @@ namespace DiscordRP {
 	/// <summary>
 	/// Class for custom biomes
 	/// </summary>
-	public class BiomeStatus {
+	public class Biome {
 		/// <value>
 		/// function to determine if the player is currently
 		/// within the biome. You should probably use
