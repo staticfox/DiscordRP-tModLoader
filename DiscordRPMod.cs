@@ -85,9 +85,13 @@ namespace DiscordRP {
 			BiomeStatus currentBiome = null;
 
 			foreach (BiomeStatus biome in exBiomeStatus) {
-				if (biome.checker() && (currentBiome == null || biome.priority >= currentBiome.priority)) {
-					currentBiome = biome;
-				}
+				if (!biome.checker())
+					continue;
+
+				if (currentBiome != null && currentBiome.priority > biome.priority)
+					continue;
+
+				currentBiome = biome;
 			}
 
 			return currentBiome;
