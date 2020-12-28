@@ -63,7 +63,7 @@ namespace DiscordRP {
 		private Boss getCurrentBoss() {
 			Boss currentBoss = null;
 
-			foreach (Terraria.NPC npc in Main.npc) {
+			foreach (NPC npc in Main.npc) {
 				if (!npc.active || !bossExists(npc.type))
 					continue;
 
