@@ -85,7 +85,7 @@ namespace DiscordRP {
 			BiomeStatus currentBiome = null;
 
 			foreach (BiomeStatus biome in exBiomeStatus) {
-				if (!biome.checker())
+				if (!biome.active)
 					continue;
 
 				if (currentBiome != null && currentBiome.priority > biome.priority)
