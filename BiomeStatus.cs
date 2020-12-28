@@ -2,7 +2,7 @@ using System;
 
 namespace DiscordRP {
 	/// <summary>
-	///	Class for custom biomes
+	/// Class for custom biomes
 	/// </summary>
 	public class BiomeStatus {
 		/// <value>
@@ -13,10 +13,26 @@ namespace DiscordRP {
 		/// </value>
 		internal Func<bool> checker = null;
 
-		public string largeKey = "biome_placeholder";
-		public string largeText = "???";
-		public string client = "default";
+		/// <value>
+		/// name of the uploaded image for the large profile artwork
+		/// </value>
+		public string imageKey = "biome_placeholder";
+
+		/// <value>
+		/// tooltip for the imageKey
+		/// </value>
+		public string imageName = "???";
+
+		/// <value>
+		/// floating point value to allow for boss precedence.
+		/// the higher the value, the higher the precedence.
+		/// </value>
 		public float priority = 0f;
+
+		/// <value>
+		/// DiscordRP instance linked to this boss
+		/// </value>
+		public string clientId = "default";
 
 		/// <value>
 		/// Whether or not the player is currently in the biome.

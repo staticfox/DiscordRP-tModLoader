@@ -306,15 +306,23 @@ namespace DiscordRP {
 		/// </summary>
 		private void ClientOnMainMenu() {
 			ChangeDiscordClient("default");
+			ClientStatus status = new ClientStatus() {};
+
 			if (customStatus == null) {
-				ClientSetStatus("", "In Main Menu", "payload_test", "tModLoader");
+				status.details = "In Main Menu";
+				status.largeImageKey = "payload_test";
+				status.largeImageText = "tModLoader";
 			}
 			else {
-				ClientSetStatus(customStatus.GetState(), customStatus.GetDetails(),
-				customStatus.largeKey, customStatus.largeImage,
-				customStatus.smallKey, customStatus.smallImage);
+				status.state = customStatus.GetState();
+				status.details = customStatus.GetDetails();
+				status.largeImageKey = customStatus.largeKey;
+				status.largeImageText = customStatus.largeImage;
+				status.smallImageKey = customStatus.smallKey;
+				status.smallImageText = customStatus.smallImage;
 			}
 
+			ClientSetStatus(status);
 			ClientSetParty();
 			ClientForceUpdate();
 		}
@@ -331,32 +339,29 @@ namespace DiscordRP {
 		/// <summary>
 		/// Change the status
 		/// </summary>
-		/// <param name="state">lower status string</param>
-		/// <param name="details">upper status string</param>
-		/// <param name="largeImageKey">key for large image</param>
-		/// <param name="largeImageText">text for large image</param>
-		/// <param name="smallImageKey">key for small image</param>
-		/// <param name="smallImageText">text for small image</param>
-		public void ClientSetStatus(string state = "", string details = "", string largeImageKey = null, string largeImageText = null, string smallImageKey = null, string smallImageText = null) {
+		/// <param name="status">
+		/// An instance of <see cref="ClientStatus">
+		/// </param>
+		public void ClientSetStatus(ClientStatus status) {
 			RichPresenceInstance.Assets = RichPresenceInstance.Assets ?? new Assets();
-			RichPresenceInstance.State = state;
-			RichPresenceInstance.Details = details;
-			if (largeImageKey == null) {
+			RichPresenceInstance.State = status.state;
+			RichPresenceInstance.Details = status.details;
+			if (status.largeImageKey == null) {
 				RichPresenceInstance.Assets.LargeImageKey = null;
 				RichPresenceInstance.Assets.LargeImageText = null;
 			}
 			else {
-				RichPresenceInstance.Assets.LargeImageKey = largeImageKey;
-				RichPresenceInstance.Assets.LargeImageText = largeImageText;
+				RichPresenceInstance.Assets.LargeImageKey = status.largeImageKey;
+				RichPresenceInstance.Assets.LargeImageText = status.largeImageText;
 			}
 
-			if (smallImageKey == null) {
+			if (status.smallImageKey == null) {
 				RichPresenceInstance.Assets.SmallImageKey = null;
 				RichPresenceInstance.Assets.SmallImageText = null;
 			}
 			else {
-				RichPresenceInstance.Assets.SmallImageKey = smallImageKey;
-				RichPresenceInstance.Assets.SmallImageText = smallImageText;
+				RichPresenceInstance.Assets.SmallImageKey = status.smallImageKey;
+				RichPresenceInstance.Assets.SmallImageText = status.smallImageText;
 			}
 		}
 
@@ -447,31 +452,35 @@ namespace DiscordRP {
 			if (Main.LocalPlayer == null)
 				return;
 
-			string largeImageKey = null;
-			string largeImageText = null;
-			string selectedClient = "default";
+			ClientStatus status = new ClientStatus() {
+				state = getPlayerState(),
+				details = null,
+				largeImageText = worldStaticInfo,
+			};
 
 			(string itemKey, string itemText) = GetItemStat();
+			status.smallImageKey = itemKey;
+			status.smallImageText = itemText;
 
 			Boss boss = getCurrentBoss();
 			BiomeStatus biome = getCurrentBiome();
+			string selectedClient = "default";
 
 			if (boss != null) {
-				largeImageKey = boss.imageKey;
-				largeImageText = "Fighting " + boss.imageName;
+				status.largeImageKey = boss.imageKey;
+				status.details = "Fighting " + boss.imageName;
 				selectedClient = boss.clientId;
 			} else if (biome != null) {
-				largeImageKey = biome.largeKey;
-				largeImageText = "In " + biome.largeText;
-				selectedClient = biome.client;
+				status.largeImageKey = biome.imageKey;
+				status.details = "In " + biome.imageName;
+				selectedClient = biome.clientId;
 
 				string timeOfDay = getTimeOfDay();
 				if (timeOfDay != null)
-					largeImageText += $" ({timeOfDay})";
+					status.details += $" ({timeOfDay})";
 			}
 
-			string state = getPlayerState();
-			ClientSetStatus(state, largeImageText, largeImageKey, worldStaticInfo, itemKey, itemText);
+			ClientSetStatus(status);
 			UpdateLobbyInfo();
 			ChangeDiscordClient(selectedClient);
 

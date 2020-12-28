@@ -85,10 +85,10 @@ namespace DiscordRP {
 
 			BiomeStatus biome = new BiomeStatus() {
 				checker = checker,
-				largeKey = imageKey.Item1,
-				largeText = imageKey.Item2,
+				imageKey = imageKey.Item1,
+				imageName = imageKey.Item2,
 				priority = priority,
-				client = client,
+				clientId = client,
 			};
 			DiscordRPMod.Instance.addBiome(biome);
 		}
