@@ -311,14 +311,11 @@ namespace DiscordRP {
 		private void ClientOnMainMenu() {
 			ChangeDiscordClient("default");
 
-			ClientStatus status = customStatus;
-			if (status == null) {
-				status = new ClientStatus() {
-					details = "In Main Menu",
-					largeImageKey = "payload_test",
-					largeImageText = "tModLoader",
-				};
-			}
+			ClientStatus status = customStatus ?? new ClientStatus() {
+				details = "In Main Menu",
+				largeImageKey = "payload_test",
+				largeImageText = "tModLoader",
+			};
 
 			ClientSetStatus(status);
 			ClientSetParty();
