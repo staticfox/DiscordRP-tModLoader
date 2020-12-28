@@ -2,7 +2,8 @@ using System;
 
 namespace DiscordRP {
 	/// <summary>
-	/// Class for custom biomes
+	/// Represents a Biome that is presentable through
+	/// Discord Rich Presence.
 	/// </summary>
 	public class Biome {
 		/// <value>
