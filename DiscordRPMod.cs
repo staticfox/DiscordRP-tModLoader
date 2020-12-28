@@ -33,7 +33,7 @@ namespace DiscordRP {
 
 		internal Timestamps timestamp = null;
 
-		internal Dictionary<int, Boss> exBossIDtoDetails = new Dictionary<int, Boss>();
+		private Dictionary<int, Boss> presentableBosses = new Dictionary<int, Boss>();
 
 		private ClientStatus customStatus = null;
 
@@ -49,15 +49,15 @@ namespace DiscordRP {
 		internal ClientPlayer modPlayer => Main.LocalPlayer.GetModPlayer<ClientPlayer>();
 
 		public void addBoss(int bossId, Boss boss) {
-			exBossIDtoDetails.Add(bossId, boss);
+			presentableBosses.Add(bossId, boss);
 		}
 
 		private bool bossExists(int bossId) {
-			return exBossIDtoDetails.ContainsKey(bossId);
+			return presentableBosses.ContainsKey(bossId);
 		}
 
 		private Boss getBossById(int bossId) {
-			return exBossIDtoDetails[bossId];
+			return presentableBosses[bossId];
 		}
 
 		private Boss getCurrentBoss() {
@@ -188,7 +188,7 @@ namespace DiscordRP {
 				currentClient = "default";
 				canCreateClient = true;
 				presentableBiomes = new List<Biome>();
-				exBossIDtoDetails = new Dictionary<int, Boss>();
+				presentableBosses = new Dictionary<int, Boss>();
 
 				savedDiscordAppId = new Dictionary<string, string>();
 
