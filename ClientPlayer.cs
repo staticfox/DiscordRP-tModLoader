@@ -8,10 +8,9 @@ namespace DiscordRP {
 	public class ClientPlayer : ModPlayer {
 		internal bool dead = false;
 		internal int nearbyNPC = 0;
-		internal bool isMe => player.whoAmI == Main.myPlayer;
 
-		public override void OnEnterWorld(Player player) {
-			if (isMe) {
+		public override void OnEnterWorld(Player pPlayer) {
+			if (pPlayer.whoAmI == Main.myPlayer) {
 				DiscordRPMod.Instance.inWorld = true;
 
 				DiscordRPMod.Instance.UpdateWorldStaticInfo();
@@ -22,8 +21,8 @@ namespace DiscordRP {
 			DiscordRPMod.Instance.ClientForceUpdate();
 		}
 
-		public override void PlayerConnect(Player player) {
-			if (isMe) {
+		public override void PlayerConnect(Player pPlayer) {
+			if (pPlayer.whoAmI == Main.myPlayer) {
 				DiscordRPMod.Instance.inWorld = true;
 			}
 
@@ -31,8 +30,8 @@ namespace DiscordRP {
 			DiscordRPMod.Instance.ClientForceUpdate();
 		}
 
-		public override void PlayerDisconnect(Player player) {
-			if (isMe) {
+		public override void PlayerDisconnect(Player pPlayer) {
+			if (pPlayer.whoAmI == Main.myPlayer) {
 				DiscordRPMod.Instance.inWorld = false;
 			}
 
@@ -45,13 +44,13 @@ namespace DiscordRP {
 		}
 
 		public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource) {
-			if (isMe) {
+			if (player.whoAmI == Main.myPlayer) {
 				dead = true;
 			}
 		}
 
-		public override void OnRespawn(Player player) {
-			if (isMe) {
+		public override void OnRespawn(Player pPlayer) {
+			if (pPlayer.whoAmI == Main.myPlayer) {
 				dead = false;
 			}
 		}
